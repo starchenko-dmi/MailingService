@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Сервис рассылок{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        #sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            padding-top: 1rem;
+        }
+        .content {
+            flex: 1;
+        }
+        footer {
+            padding: 1rem 0;
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            margin-top: 2rem;
+        }
+        @media (max-width: 991.98px) {
+            #sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Шапка (Header) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'mailing:client_list' %}">✉️ Сервис рассылок</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:home' %}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:client_list' %}">Клиенты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:message_list' %}">Сообщения</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:mailing_list' %}">Рассылки</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Боковое меню (Sidebar) – скрыто на мобильных -->
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:home' %}">
+                        Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:client_list' %}">
+                        🧑‍💼 Клиенты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:message_list' %}">
+                        ✉️ Сообщения
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mailing:mailing_list' %}">
+                        📤 Рассылки
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Основной контент -->
+        <main class="content col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<!-- Подвал (Footer) -->
+<footer class="mt-auto">
+    <div class="container text-center text-muted">
+        <p>&copy; 2025 Сервис рассылок. Все права защищены.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS (требуется для работы компонентов, если будут модалки и т.п.) -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

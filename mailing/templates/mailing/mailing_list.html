@@ -1,0 +1,50 @@
+{% extends "mailing/base.html" %}
+{% block content %}
+<h2>Рассылки</h2>
+<a href="{% url 'mailing:mailing_create' %}" class="btn btn-primary mb-3">Создать рассылку</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Первая отправка</th>
+            <th>Окончание</th>
+            <th>Статус</th>
+            <th>Сообщение</th>
+            <th>Получателей</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mailing in mailings %}
+        <tr>
+            <td>{{ mailing.start_time|date:"d.m.Y H:i" }}</td>
+            <td>{{ mailing.end_time|date:"d.m.Y H:i" }}</td>
+            <td>
+                {% if mailing.status == 'Запущена' %}
+                    <span class="badge bg-success">{{ mailing.status }}</span>
+                {% elif mailing.status == 'Завершена' %}
+                    <span class="badge bg-secondary">{{ mailing.status }}</span>
+                {% else %}
+                    <span class="badge bg-info">{{ mailing.status }}</span>
+                {% endif %}
+            </td>
+            <td>{{ mailing.message.subject }}</td>
+            <td>{{ mailing.clients.count }}</td>
+            <td>
+                <a href="{% url 'mailing:mailing_update' mailing.pk %}" class="btn btn-sm btn-outline-warning">Изменить</a>
+                <a href="{% url 'mailing:mailing_delete' mailing.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                <!-- Кнопка отправки — всегда доступна для всех рассылок -->
+                <form method="post" action="{% url 'mailing:mailing_send' mailing.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-success"
+                            onclick="return confirm('Отправить рассылку сейчас?')">
+                        Отправить сейчас
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">Нет рассылок</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
