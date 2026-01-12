@@ -3,6 +3,7 @@ from django.core.validators import EmailValidator
 
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class Client(models.Model):
@@ -35,20 +36,8 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
-    STATUS_CHOICES = [
-        ('Создана', 'Создана'),
-        ('Запущена', 'Запущена'),
-        ('Завершена', 'Завершена'),
-    ]
-
     start_time = models.DateTimeField(verbose_name="Дата и время первой отправки")
     end_time = models.DateTimeField(verbose_name="Дата и время окончания отправки")
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='Создана',
-        verbose_name="Статус"
-    )
     message = models.ForeignKey(
         Message,
         on_delete=models.CASCADE,
@@ -58,9 +47,27 @@ class Mailing(models.Model):
         Client,
         verbose_name="Получатели"
     )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Владелец",
+        null=True,  # временно, чтобы миграция прошла
+        blank=True
+    )
 
     def __str__(self):
         return f"Рассылка от {self.start_time.strftime('%Y-%m-%d %H:%M')}"
+
+    @property
+    def status(self):
+        from django.utils import timezone
+        now = timezone.now()
+        if now < self.start_time:
+            return 'Создана'
+        elif now <= self.end_time:
+            return 'Запущена'
+        else:
+            return 'Завершена'
 
     class Meta:
         verbose_name = "Рассылка"
@@ -119,10 +126,5 @@ def send_mailing(mailing: Mailing):
                 server_response=str(e)
             )
             failures += 1
-
-    # Обновляем статус рассылки на "Запущена", если ещё не запущена
-    if mailing.status == 'Создана':
-        mailing.status = 'Запущена'
-        mailing.save(update_fields=['status'])
 
     return successes, failures

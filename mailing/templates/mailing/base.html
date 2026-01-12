@@ -44,19 +44,25 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:home' %}">Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:client_list' %}">Клиенты</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:message_list' %}">Сообщения</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:mailing_list' %}">Рассылки</a>
-                </li>
+           <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mailing:user_report' %}">Статистика</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">Привет, {{ user.username }}!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
