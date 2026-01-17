@@ -2,6 +2,6 @@
 
 Пожалуйста, перейдите по ссылке ниже, чтобы активировать ваш аккаунт:
 
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+http://{{ domain }}{% url 'users:activate' uidb64=uid token=token %}
 
 Если вы не регистрировались на нашем сайте, просто проигнорируйте это письмо.

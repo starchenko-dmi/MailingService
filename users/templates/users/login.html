@@ -6,6 +6,6 @@
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Войти</button>
 </form>
-<p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
-<a href="{% url 'password_reset' %}">Забыли пароль?</a>
+<p>Нет аккаунта? <a href="{% url 'users:register' %}">Зарегистрироваться</a></p>
+<a href="{% url 'users:password_reset' %}">Забыли пароль?</a>
 {% endblock %}

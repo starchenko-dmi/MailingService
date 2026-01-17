@@ -39,28 +39,25 @@
 <!-- Шапка (Header) -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'mailing:client_list' %}">✉️ Сервис рассылок</a>
+        <a class="navbar-brand" href="{% url 'mailing:home' %}">✉️ Сервис рассылок</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-           <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'mailing:user_report' %}">Статистика</a>
+                        <span class="navbar-text me-2">Привет, {{ user.username }}!</span>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">Привет, {{ user.username }}!</span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                        <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                        <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+                        <a class="nav-link" href="{% url 'users:register' %}">Регистрация</a>
                     </li>
                 {% endif %}
             </ul>
@@ -74,30 +71,40 @@
         <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:home' %}">
-                        Главная
-                    </a>
+                    <a class="nav-link" href="{% url 'mailing:home' %}">Главная</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:client_list' %}">
-                        🧑‍💼 Клиенты
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:message_list' %}">
-                        ✉️ Сообщения
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mailing:mailing_list' %}">
-                        📤 Рассылки
-                    </a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mailing:client_list' %}">🧑‍💼 Клиенты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mailing:message_list' %}">✉️ Сообщения</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mailing:mailing_list' %}">📤 Рассылки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mailing:user_report' %}">📊 Статистика</a>
+                    </li>
+                    {% if is_manager %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:user_list' %}">👥 Пользователи</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
             </ul>
         </nav>
 
         <!-- Основной контент -->
         <main class="content col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% block content %}{% endblock %}
         </main>
     </div>
@@ -106,11 +113,11 @@
 <!-- Подвал (Footer) -->
 <footer class="mt-auto">
     <div class="container text-center text-muted">
-        <p>&copy; 2025 Сервис рассылок. Все права защищены.</p>
+        <p>&copy; 2026 Сервис рассылок. Все права защищены.</p>
     </div>
 </footer>
 
-<!-- Bootstrap JS (требуется для работы компонентов, если будут модалки и т.п.) -->
+<!-- Bootstrap JS -->
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 
 </body>
