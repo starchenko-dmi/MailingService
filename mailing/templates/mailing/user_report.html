@@ -1,0 +1,64 @@
+{% extends "mailing/base.html" %}
+{% block title %}Моя статистика{% endblock %}
+
+{% block content %}
+<h2>📊 Моя статистика рассылок</h2>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-center bg-primary text-white">
+            <div class="card-body">
+                <h3>{{ total_mailings }}</h3>
+                <p class="card-text">Создано рассылок</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-success text-white">
+            <div class="card-body">
+                <h3>{{ successful_attempts }}</h3>
+                <p class="card-text">Успешных отправок</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-danger text-white">
+            <div class="card-body">
+                <h3>{{ failed_attempts }}</h3>
+                <p class="card-text">Ошибок отправки</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-info text-white">
+            <div class="card-body">
+                <h3>{{ success_rate }}%</h3>
+                <p class="card-text">Успешность</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5>📧 Уникальных получателей</h5>
+                <p class="display-6">{{ unique_clients }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5>📤 Всего попыток отправки</h5>
+                <p class="display-6">{{ total_attempts }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'mailing:mailing_list' %}" class="btn btn-outline-secondary">← Назад к рассылкам</a>
+</div>
+{% endblock %}
